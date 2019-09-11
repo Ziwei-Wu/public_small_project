@@ -50,7 +50,7 @@ def get_position(ra,dec):
     return coords_l, coords_b
 
 def main():
-    parser = argparse.ArgumentParser(description='Select the archive.')
+    parser = argparse.ArgumentParser(description='PLot the sky distribution of known pulsar')
     parser.add_argument('inputname', help='the input name, you can just input any name')
     args = parser.parse_args()
     
