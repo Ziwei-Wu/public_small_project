@@ -4,8 +4,6 @@
 create_dyn_psrflux.py
 ----------------------------------
 Crate dynamic spectrum with "psrflux" 
-
-
 """
 
 import time
@@ -15,6 +13,7 @@ import warnings
 import subprocess
 import psrchive as psr
 import numpy as np
+import os
 
 
 def ignorewarnings():   
@@ -25,7 +24,6 @@ def ignorewarnings():
 def archiveinfo(archive):
     arch = psr.Archive_load(archive)
     name = arch.get_source()
-    mjd_dbl = arch.get_Integration(0).get_start_time().in_days()
     freq_lo = arch.get_centre_frequency() - arch.get_bandwidth()/2.0
     freq_hi = arch.get_centre_frequency() + arch.get_bandwidth()/2.0
     #mjd_start = arch.get_Integration(0).get_start_time().in_days()
@@ -41,17 +39,18 @@ def archiveinfo(archive):
 
     return name, site, freq_lo, freq_hi, mjd_start, mjd_end, ra, dec, nsubint, nchan
 
-
 def standard_psrflux(archives):
     """
     get dynamic spectrum with psrflux with self-standard profile
     """
     for archive in archives:
-        start = time.time()
-        print "Loadding dynamic spectrum with psrflux ......"
-        subprocess.call('psrflux %s' % archive, shell=True)
-        end = time.time()
-        print("...Loaded in {0} seconds\n".format(round(end-start, 2)))
+        dyn_name = archive + '.ds'
+        if not os.path.isfile(dyn_name):
+            start = time.time()
+            print "Loadding dynamic spectrum with psrflux ......"
+            subprocess.call('psrflux %s' % archive, shell=True)
+            end = time.time()
+            print("...Loaded in {0} seconds\n".format(round(end-start, 2)))
 
     """
     Load a dynamic spectrum from psrflux-format file
@@ -67,7 +66,7 @@ def standard_psrflux(archives):
             np.savetxt('%s' % full_name, dynspec,  fmt='%.5f')
             with open("%s" % (full_name), "a") as myfile:
                 myfile.write("\n # %s %s %f %f %f %f %s %s" % (name, site, freq_lo, freq_hi, mjd_start, mjd_end, ra, dec))
-            subprocess.call('rm %s' % archive_dyn, shell=True)
+            #subprocess.call('rm %s' % archive_dyn, shell=True)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Select the archive.')
