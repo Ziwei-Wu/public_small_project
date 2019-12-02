@@ -25,15 +25,14 @@ def ignorewarnings():
 def archiveinfo(archive):
     arch = psr.Archive_load(archive)
     name = arch.get_source()
-    data = arch.get_data()
     mjd_dbl = arch.get_Integration(0).get_start_time().in_days()
     freq_lo = arch.get_centre_frequency() - arch.get_bandwidth()/2.0
     freq_hi = arch.get_centre_frequency() + arch.get_bandwidth()/2.0
     mjd_start = arch.get_Integration(0).get_start_time().in_days()
     mjd_end = arch.get_Integration(0).get_end_time().in_days()
     site = arch.get_telescope()
-    data = arch.get_data()
-    nsubint, nchan = data.shape[0], data.shape[2]
+    nsubint = arch.get_nsubint()
+    nchan = arch.get_nchan()
     coord = arch.get_coordinates()
     ra = coord.ra().getHMS()
     dec = coord.dec().getHMS()
