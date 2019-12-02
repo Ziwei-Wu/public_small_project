@@ -28,8 +28,10 @@ def archiveinfo(archive):
     mjd_dbl = arch.get_Integration(0).get_start_time().in_days()
     freq_lo = arch.get_centre_frequency() - arch.get_bandwidth()/2.0
     freq_hi = arch.get_centre_frequency() + arch.get_bandwidth()/2.0
-    mjd_start = arch.get_Integration(0).get_start_time().in_days()
-    mjd_end = arch.get_Integration(0).get_end_time().in_days()
+    #mjd_start = arch.get_Integration(0).get_start_time().in_days()
+    #mjd_end = arch.get_Integration(0).get_end_time().in_days()
+    mjd_start = float(arch.start_time().strtempo())
+    mjd_end = float(arch.end_time().strtempo())
     site = arch.get_telescope()
     nsubint = arch.get_nsubint()
     nchan = arch.get_nchan()
